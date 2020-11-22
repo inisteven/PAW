@@ -14,7 +14,7 @@ class CreateOrderPaymentsTable extends Migration
     public function up()
     {
         Schema::create('order_payments', function (Blueprint $table) {
-            $table->id_order();
+            $table->bigIncrements('id_order');
             $table->integer('id_user');
             $table->string('address');
             $table->string('city');

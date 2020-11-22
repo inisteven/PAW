@@ -14,7 +14,7 @@ class CreateWomenTable extends Migration
     public function up()
     {
         Schema::create('women', function (Blueprint $table) {
-            $table->id_productM();
+            $table->bigIncrements('id_produkW');
             $table->string('nama_productW');
             $table->double('harga_productW');
             $table->string('deskripsi_productW');

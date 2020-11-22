@@ -14,7 +14,7 @@ class CreateAccessoriesTable extends Migration
     public function up()
     {
         Schema::create('accessories', function (Blueprint $table) {
-            $table->id_aksesoris();
+            $table->bigIncrements('id_aksesoris');
             $table->string('nama_aksesoris');
             $table->double('harga_aksesoris');
             $table->string('deskripsi_aksesoris');

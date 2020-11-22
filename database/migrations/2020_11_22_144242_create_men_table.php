@@ -14,7 +14,7 @@ class CreateMenTable extends Migration
     public function up()
     {
         Schema::create('men', function (Blueprint $table) {
-            $table->id_productM();
+            $table->bigIncrements('id_produkM');
             $table->string('nama_productM');
             $table->double('harga_productM');
             $table->string('deskripsi_productM');
