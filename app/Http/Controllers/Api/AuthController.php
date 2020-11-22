@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\VerifiesEmails;
+
 use App\User;
 use Validator;
 
 class AuthController extends Controller
 {
+    use VerifiesEmails;
     public function register(Request $request){
 
         $registrationData = $request->all();
@@ -24,7 +27,8 @@ class AuthController extends Controller
             return response(['message'=> $validate->errors()],400); //return error invalid input
 
             $registrationData['password']= bcrypt($request->password); //enkripsi password
-            $user = User::create($registrationData)->sendEmailVerificationNotification();//membuat user baru
+            $user = User::create($registrationData);
+            $user->sendApiEmailVerificationNotification();//membuat user baru
             // $accessToken = $user->createToken('authToken')->access_token;
             return response([
                 'message'=>'Register Success',
@@ -54,7 +58,8 @@ class AuthController extends Controller
         if(!Auth::attempt($loginData))
             return response(['message' => 'Invalid Credentials'],401); //return error gagal login
 
-        $user = Auth::user();
+        Auth::user();
+        // $user = $this->auth->user();
         $token = $user->createToken('Authentication Token')->accessToken; //generate token
 
         return response([
