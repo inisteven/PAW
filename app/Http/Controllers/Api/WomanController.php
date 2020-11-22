@@ -5,17 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
-use App\Man;
+use App\Woman;
 
-class ManController extends Controller
+class WomanController extends Controller
 {
     public function index(){
-        $men = Man::all();
+        $women = Woman::all();
 
-        if(count($men) > 0){
+        if(count($women) > 0){
             return response([
                 'message' => 'Retrieve All Success',
-                'data' => $men
+                'data' => $women
             ],200);
         }
 
@@ -26,17 +26,17 @@ class ManController extends Controller
     }
 
     public function show($id){
-        $man = Man::find($id);
+        $woman = Woman::find($id);
 
-        if(!is_null($man)){
+        if(!is_null($woman)){
             return response([
-                'message' => 'Retrieve Product Man Success',
-                'data' => $man
+                'message' => 'Retrieve Product Woman Success',
+                'data' => $woman
             ],200);
         }
 
         return response([
-            'message' => 'Product Man Not Found',
+            'message' => 'Product Woman Not Found',
             'data' => null
         ],404);
     }
@@ -44,9 +44,9 @@ class ManController extends Controller
     public function store(Request $request){
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'nama_productM' => 'required|alphanumeric',
-            'harga_productM' => 'required|numeric',
-            'deskripsi_productM' => 'required|alphanumeric',
+            'nama_productW' => 'required|alphanumeric',
+            'harga_productW' => 'required|numeric',
+            'deskripsi_productW' => 'required|alphanumeric',
             'kategori' => 'required|alpha',
             'stok' => 'required|numeric',
         ]);
@@ -58,65 +58,63 @@ class ManController extends Controller
         {
             $file = $request->file('image');
             $filename = time().$file->getClientOriginalName();
-            $path = base_path().'/public/uploads/man/'.$filename;
+            $path = base_path().'/public/uploads/woman/'.$filename;
             $file->move($path,$filename);
 
         }
 
-        $man = new Man;
-        $man->nama_productM = $request->nama_productM;
-        $man->harga_productM = $request->harga_productM;
-        $man->deskripsi_productM = $request->deskripsi_productM;
-        $man->gambar_productM = $path;
-        $man->kategori = $request->kategori;
-        $man->stok = $request->stok;
-        $man->save();
-
-       // $man = Man::create($storeData);
+        $woman = new Woman;
+        $woman->nama_productW = $request->nama_productW;
+        $woman->harga_productW = $request->harga_productW;
+        $woman->deskripsi_productW = $request->deskripsi_productW;
+        $woman->gambar_productW = $path;
+        $woman->kategori = $request->kategori;
+        $woman->stok = $request->stok;
+        $woman->save();
         
         return response([
-            'message' => 'Add Product Man Success',
-            'data' => $man,
+            'message' => 'Add Product Woman Success',
+            'data' => $woman,
         ],200);
     }
 
     public function destroy($id){
-        $man = Man::find($id);
+        $woman = Woman::find($id);
 
         if(is_null($man)){
             return response([
-                'message' => 'Product Man Not Found',
+                'message' => 'Product Woman Not Found',
                 'data' => $null
             ],404);
         }
 
-        if($man->delete()){
+        if($woman->delete()){
             return response([
-            'message' => 'Delete Product Man Success',
-            'data' => $man,
+            'message' => 'Delete Product Woman Success',
+            'data' => $woman,
             ],200);
         } 
         
         return response([
-            'message' => 'Delete Product Man Failed',
+            'message' => 'Delete Product Woman Failed',
             'data' => null,
         ],400);
     }
 
     public function update(Request $request, $id){
-        $man = Man::find($id);
-        if(is_null($man)){
+        $woman = Woman::find($id);
+        if(is_null($woman)){
             return response([
-                'message' => 'Product Man Not Found',
+                'message' => 'Product Woman Not Found',
                 'data' => $null
             ],404);
         }
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'nama_productM' => 'required|alphanumeric',
-            'harga_productM' => 'required|numeric',
-            'deskripsi_productM' => 'required|alphanumeric',
+            'nama_productW' => 'required|alphanumeric',
+            'harga_productW' => 'required|numeric',
+            'deskripsi_productW' => 'required|alphanumeric',
             'kategori' => 'required|alpha',
             'stok' => 'required|numeric',
         ]);
@@ -124,31 +122,31 @@ class ManController extends Controller
         if($validate->fails())
             return response(['message' => $validate->errors()],400);
 
-        $man->nama_productM = $updateData['nama_productM'];
-        $man->harga_productM = $updateData['harga_productM'];
-        $man->deskripsi_productM = $updateData['deskripsi_productM'];
-        $man->kategori = $updateData['kategori'];
-        $man->stok = $updateData['stok'];
+        $woman->nama_productW = $updateData['nama_productW'];
+        $woman->harga_productW = $updateData['harga_productW'];
+        $woman->deskripsi_productW = $updateData['deskripsi_productW'];
+        $woman->kategori = $updateData['kategori'];
+        $woman->stok = $updateData['stok'];
 
         if($request->hasfile('image'))
         {
             $file = $request->file('image');
             $filename = time().$file->getClientOriginalName();
-            $path = base_path().'/public/uploads/man/'.$filename;
+            $path = base_path().'/public/uploads/woman/'.$filename;
             $file->move($path,$filename);
 
-            $man->gambar_productM = $path;
+            $woman->gambar_productW = $path;
         }
 
-        if($man->save()){
+        if($woman->save()){
             return response([
-            'message' => 'Update Product Man Success',
-            'data' => $man,
+            'message' => 'Update Product Woman Success',
+            'data' => $woman,
             ],200);
         } 
         
         return response([
-            'message' => 'Update Product Man Failed',
+            'message' => 'Update Product Woman Failed',
             'data' => null,
         ],400);
     }

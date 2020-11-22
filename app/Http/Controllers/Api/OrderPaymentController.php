@@ -68,14 +68,14 @@ class OrderPaymentController extends Controller
 
         $order = new OrderPayment;
         $order->id_user = $request->id_user;
-        $product->address = $request->address;
-        $product->city = $request->city;
-        $product->province = $request->province;
-        $product->postal_code = $request->postal_code;
-        $product->total_harga = $request->total_harga;
-        $product->bukti_tf = $path;
-        $product->phoneNumber = $request->phoneNumber;
-        $product->save();
+        $order->address = $request->address;
+        $order->city = $request->city;
+        $order->province = $request->province;
+        $order->postal_code = $request->postal_code;
+        $order->total_harga = $request->total_harga;
+        $order->bukti_tf = $path;
+        $order->phoneNumber = $request->phoneNumber;
+        $order->save();
         
         return response([
             'message' => 'Add Order Payment Success',

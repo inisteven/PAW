@@ -24,14 +24,28 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('cart', 'Api\CartController@store');
     Route::put('cart/{id}', 'Api\CartController@update');
     Route::delete('cart/{id}', 'Api\CartController@destroy');
+
     Route::get('order', 'Api\OrderPaymentController@index');
     Route::get('order/{id}', 'Api\OrderPaymentController@show');
     Route::post('order', 'Api\OrderPaymentController@store');
     Route::put('order/{id}', 'Api\OrderPaymentController@update');
     Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
+
     Route::get('man', 'Api\ManController@index');
     Route::get('man/{id}', 'Api\ManController@show');
     Route::post('man', 'Api\ManController@store');
     Route::put('man/{id}', 'Api\ManController@update');
     Route::delete('man/{id}', 'Api\ManController@destroy');
+
+    Route::get('woman', 'Api\WomanController@index');
+    Route::get('woman/{id}', 'Api\WomanController@show');
+    Route::post('woman', 'Api\WomanController@store');
+    Route::put('woman/{id}', 'Api\WomanController@update');
+    Route::delete('woman/{id}', 'Api\WomanController@destroy');
+
+    Route::get('acc', 'Api\AccessoryController@index');
+    Route::get('acc/{id}', 'Api\AccessoryController@show');
+    Route::post('acc', 'Api\AccessoryController@store');
+    Route::put('acc/{id}', 'Api\AccessoryController@update');
+    Route::delete('acc/{id}', 'Api\AccessoryController@destroy');
 });
