@@ -7,8 +7,9 @@ use Carbon\Carbon;
 
 class Accessory extends Model
 {
+    protected $primaryKey = "id_aksesoris";
     protected $fillable = [
-        'nama_aksesoris', 'harga_aksesoris', 'deskripsi_aksesoris', 'gambar_aksesoris', 'kategori', 'stok'
+        'nama_aksesoris', 'harga_aksesoris', 'deskripsi_aksesoris', 'gambar_aksesoris', 'stok'
     ];
 
     public function getCreatedAtAttribute(){

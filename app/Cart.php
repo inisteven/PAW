@@ -7,6 +7,7 @@ use Carbon\Carbon;
 
 class Cart extends Model
 {
+    protected $primaryKey = "id_cart";
     protected $fillable = [
         'id_productCart', 'id_userCart', 'jumlah', 'size', 'total_harga', 'isPay', 'kategori'
     ];

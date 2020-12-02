@@ -7,6 +7,7 @@ use Carbon\Carbon;
 
 class OrderPayment extends Model
 {
+    protected $primaryKey = "id_order";
     protected $fillable = [
         'id_user', 'address', 'city', 'province', 'postal_code', 'total_harga', 'bukti_tf', 'phoneNumber'
     ];

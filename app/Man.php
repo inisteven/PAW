@@ -7,8 +7,9 @@ use Carbon\Carbon;
 
 class Man extends Model
 {
+    protected $primaryKey = "id_produkM";
     protected $fillable = [
-        'nama_productM', 'harga_productM', 'deskripsi_productM', 'gambar_productM', 'kategori', 'stok'
+        'nama_produkM', 'harga_produkM', 'deskripsi_produkM', 'gambar_produkM', 'stok'
     ];
 
     public function getCreatedAtAttribute(){

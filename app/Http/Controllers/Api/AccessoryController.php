@@ -26,7 +26,7 @@ class AccessoryController extends Controller
     }
 
     public function show($id){
-        $acc = Accessory::find($id);
+        $acc = Accessory::where('id_aksesoris','=', $id)->first();
 
         if(!is_null($acc)){
             return response([
@@ -44,44 +44,50 @@ class AccessoryController extends Controller
     public function store(Request $request){
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
-            'nama_aksesoris' => 'required|alphanumeric',
+            'nama_aksesoris' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
             'harga_aksesoris' => 'required|numeric',
-            'deskripsi_aksesoris' => 'required|alphanumeric',
-            'kategori' => 'required|alpha',
+            'deskripsi_aksesoris' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
             'stok' => 'required|numeric',
+            'gambar_aksesoris' => 'required|mimes:jpg,jpeg,png',
         ]);
 
         if($validate->fails())
             return response(['message' => $validate->errors()],400);
         
-        if($request->hasfile('image'))
+        if($request->hasfile('gambar_aksesoris'))
         {
-            $file = $request->file('image');
-            $filename = time().$file->getClientOriginalName();
-            $path = base_path().'/public/uploads/aksesoris/'.$filename;
+            $file = $request->file('gambar_aksesoris');
+            $ekstensi = $file->extension();
+            $filename = 'IMG_'.time().'.'.$ekstensi;
+            $path = base_path().'/public/products/';
             $file->move($path,$filename);
-
         }
 
         $acc = new Accessory;
         $acc->nama_aksesoris = $request->nama_aksesoris;
         $acc->harga_aksesoris = $request->harga_aksesoris;
         $acc->deskripsi_aksesoris = $request->deskripsi_aksesoris;
-        $acc->gambar_aksesoris = $path;
-        $acc->kategori = $request->kategori;
+        $acc->gambar_aksesoris = $filename;
         $acc->stok = $request->stok;
-        $acc->save();
 
-       // $man = Man::create($storeData);
+       // $aksesoris = aksesoris::create($storeData);
         
-        return response([
-            'message' => 'Add Accessory Success',
-            'data' => $acc,
-        ],200);
+       if($acc->save()){
+            return response([
+                'message' => 'Add Accessory Success',
+                'data' => $acc,
+            ],200);
+       }else{
+            return response([
+                'message' => 'Add Accessory Fail',
+                'data' => null,
+            ],400);
+       }
+        
     }
 
     public function destroy($id){
-        $acc = Accessory::find($id);
+        $acc = Accessory::where('id_aksesoris','=', $id)->first();
 
         if(is_null($acc)){
             return response([
@@ -90,7 +96,7 @@ class AccessoryController extends Controller
             ],404);
         }
 
-        if($man->delete()){
+        if($acc->delete()){
             return response([
             'message' => 'Delete Accessory Success',
             'data' => $acc,
@@ -104,7 +110,7 @@ class AccessoryController extends Controller
     }
 
     public function update(Request $request, $id){
-        $acc = Accessory::find($id);
+        $acc = Accessory::where('id_aksesoris','=', $id)->first();
         if(is_null($acc)){
             return response([
                 'message' => 'Accessory Not Found',
@@ -114,10 +120,9 @@ class AccessoryController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'nama_aksesoris' => 'required|alphanumeric',
+            'nama_aksesoris' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
             'harga_aksesoris' => 'required|numeric',
-            'deskripsi_aksesoris' => 'required|alphanumeric',
-            'kategori' => 'required|alpha',
+            'deskripsi_aksesoris' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
             'stok' => 'required|numeric',
         ]);
 
@@ -127,19 +132,8 @@ class AccessoryController extends Controller
         $acc->nama_aksesoris = $updateData['nama_aksesoris'];
         $acc->harga_aksesoris = $updateData['harga_aksesoris'];
         $acc->deskripsi_aksesoris = $updateData['deskripsi_aksesoris'];
-        $acc->kategori = $updateData['kategori'];
+
         $acc->stok = $updateData['stok'];
-
-        if($request->hasfile('image'))
-        {
-            $file = $request->file('image');
-            $filename = time().$file->getClientOriginalName();
-            $path = base_path().'/public/uploads/aksesoris/'.$filename;
-            $file->move($path,$filename);
-
-            $man->gambar_aksesoris = $path;
-        }
-
         if($acc->save()){
             return response([
             'message' => 'Update Accessory Success',
@@ -151,5 +145,46 @@ class AccessoryController extends Controller
             'message' => 'Update Accessory Failed',
             'data' => null,
         ],400);
+    }
+
+    public function uploadImage(Request $request , $id){
+        if($request->hasFile('gambar_aksesoris')){
+            $aksesoris = Accessory::find($id);
+            if(is_null($aksesoris)){
+                return response([
+                    'message' => 'Product not found',
+                    'data' => null
+                ],404);
+            }
+
+            $updateData = $request->all();
+            $validate =  Validator::make($updateData,[
+                'gambar_aksesoris' => 'mimes:jpeg,jpg,png',
+            ]);
+
+            if($validate->fails())
+                return response(['message' => 'error',400]);
+
+
+            $file = $request->file('gambar_aksesoris');
+            $ekstensi = $file->extension();
+            $filename = 'IMG_'.time().'.'.$ekstensi;
+            $path = base_path().'/public/products/';
+            $file->move($path,$filename);
+
+            $aksesoris->gambar_aksesoris = $filename;
+
+            if($aksesoris->save()){
+                return response([
+                    'message'=> 'Upload Image Success',
+                    'user'=>$aksesoris
+                ]);
+            }else{
+                return response([
+                    'message'=> 'Upload Image Fail',
+                    'user'=>null
+                ]);
+            }
+        }
     }
 }

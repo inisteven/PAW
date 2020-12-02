@@ -15,11 +15,10 @@ class CreateMenTable extends Migration
     {
         Schema::create('men', function (Blueprint $table) {
             $table->bigIncrements('id_produkM');
-            $table->string('nama_productM');
-            $table->double('harga_productM');
-            $table->string('deskripsi_productM');
-            $table->string('gambar_productM');
-            $table->string('kategori');
+            $table->string('nama_produkM');
+            $table->double('harga_produkM');
+            $table->string('deskripsi_produkM');
+            $table->string('gambar_produkM');
             $table->integer('stok');
             $table->timestamps();
         });

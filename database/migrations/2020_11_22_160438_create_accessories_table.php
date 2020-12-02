@@ -19,7 +19,6 @@ class CreateAccessoriesTable extends Migration
             $table->double('harga_aksesoris');
             $table->string('deskripsi_aksesoris');
             $table->string('gambar_aksesoris');
-            $table->string('kategori');
             $table->integer('stok');
             $table->timestamps();
         });
