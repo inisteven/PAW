@@ -8,40 +8,21 @@ use Illuminate\Http\Request;
 
 class VerificationController extends Controller {
 
-    public function verify(Request $request) {
-        // $user = User::findOrFail($request->id);
+    public function __construct() {
+        $this->middleware('auth:api')->except(['verify']);
+    }
+    
+    public function verify($user_id, Request $request) {
+        if (! $request->hasValidSignature()) {
+            return $this->respondUnAuthorizedRequest(ApiCode::INVALID_EMAIL_VERIFICATION_URL);
+        }
 
-        $userID = $request['id'];
-        $user = User::findOrFail($userID);
-        $date = date("Y-m-d g:i:s");
-        $user->email_verified_at = $date;
-        $user->save();
-        // do this check, only if you allow unverified user to login
-//        if (! hash_equals((string) $request->id, (string) $request->user()->getKey())) {
-//            throw new AuthorizationException;
-//        }
+        $user = User::findOrFail($user_id);
 
-        // if (! hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
-        //     return response()->json([
-        //         "message" => "Unauthorized",
-        //         "success" => false
-        //     ]);
-        // }
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
 
-        // if ($user->hasVerifiedEmail()) {
-        //     return response()->json([
-        //         "message" => "User already verified!",
-        //         "success" => false
-        //     ]);
-        // }
-
-        // if ($user->markEmailAsVerified()) {
-        //     event(new Verified($user));
-        // }
-
-        return response()->json([
-            "message" => "Email verified successfully!",
-            "success" => true
-        ]);
+        return redirect()->to('/');
     }
 }

@@ -51,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function sendApiEmailVerificationNotification(){
-        $this->notify(new VerifyApiEmail);
-    }
+    // public function sendApiEmailVerificationNotification(){
+    //     $this->notify(new VerifyApiEmail);
+    // }
 }

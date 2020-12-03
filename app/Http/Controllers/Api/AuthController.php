@@ -15,55 +15,78 @@ class AuthController extends Controller
     use VerifiesEmails;
     public function register(Request $request){
 
-        $registrationData = $request->all();
-        $validate = Validator::make($registrationData,[
-            'first_name' => 'required|max:60', 
-            'last_name' => 'required|max:60',
-            'email' => 'required|email:rfc,dns|unique:users',
-            'password' => 'required',
-        ]);//membuat rule validasi input
+        $validate = Validator::make($storeData, [
+            'email' => 'required|unique'
+        ]);
 
-        if($validate->fails())
-            return response(['message'=> $validate->errors()],400); //return error invalid input
-
-            $registrationData['password']= bcrypt($request->password); //enkripsi password
-            $user = User::create($registrationData);
-            $user->sendApiEmailVerificationNotification();//membuat user baru
-            // $accessToken = $user->createToken('authToken')->access_token;
+        if($validate->fails()){
             return response([
-                'message'=>'Register Success',
-                'user'=>$user,
-                // 'access_token'=>$accessToken
-            ],200);//return data user dalam bentuk json
+                'status'=>"fail",
+                'message'=>"Email must be unique",
+            ]);
+        }
+        
+        $registrationData = $request->all();
+    
+        $registrationData['password']= bcrypt($request->password); //enkripsi password
+        $user = User::create($registrationData);
+        if($user){
+            $send = $user->sendEmailVerificationNotification();
+            if($send){
+                return response([
+                    'message'=>'Register Success and send email success',
+                    'user'=>$user,
+                ],200);
+            }else{
+                return response([
+                    'message'=>'Register success and send email failed',
+                    'user'=>$user,
+                ],200);
+            }
+        }
+        return response([
+            'message'=>'Register failed',
+            'user'=>null,
+        ]); 
     }
 
     public function login(Request $request){
-        $user = User::where('email', $request['email'])->where('email_verified_at', '<>', NULL)->first();
 
-        if (!$user) {
-            return [
-                "response" => 'Email is not verified'
-            ];
+        $email = $request->email;
+        $user = User::where('email','=',$email)->first();
+        
+        if(is_null($user)){
+            return response([
+                'status' => 'fail',
+                'message' => "Email is not registered yet",
+                'data' => null
+            ]);
         }
         
         $loginData = $request->all();
-        $validate = Validator::make($loginData,[
-            'email' => 'required|email:rfc,dns',
-            'password' => 'required',
-        ]);//membuat rule validasi input
-
-        if($validate->fails())
-            return response(['message'=> $validate->errors()],400); //return error invalid input
-
         if(!Auth::attempt($loginData))
-            return response(['message' => 'Invalid Credentials'],401); //return error gagal login
+            return response([
+                'status' => 'fail',
+                'message' => 'Invalid Credentials',
+                'data' => null,
+            ],401); 
 
-        Auth::user();
+        $user = User::where('email', $request['email'])->where('email_verified_at', '<>', NULL)->first();
+        if (!$user) {
+            return response([
+                'status' => 'fail',
+                "message" => 'Email is not verified yet',
+                'data' => null
+            ]);
+        }
+
+        $user = Auth::user();
         // $user = $this->auth->user();
         $token = $user->createToken('Authentication Token')->accessToken; //generate token
 
         return response([
-            'message'=>'Authenticated',
+            'status' => 'success',
+            'message'=>'Sign in successfull',
             'user'=>$user,
             'token_type'=>'Bearer',
             'access_token'=>$token,
