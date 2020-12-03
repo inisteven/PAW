@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Auth\VerifiesEmails;
 
 use App\User;
@@ -99,7 +100,7 @@ class AuthController extends Controller
         if(!is_null($user)){
             return response([
                 'message'=> 'Retrieve User Success',
-                'data' => null,
+                'data' => $user,
             ]);
         } 
 
@@ -124,7 +125,7 @@ class AuthController extends Controller
         if(!Hash::check($request->oldPassword,$user->password)){
             return response([
                 'status' => 'fail',
-                'message' => 'Your old password is wrong',
+                'message' => 'Your current password is wrong',
                 'data' => null
             ],400);
         }

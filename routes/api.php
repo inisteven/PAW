@@ -37,6 +37,9 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
 
     Route::get('user/{id}','Api\AuthController@readData');
+    Route::put('user/{id}','Api\AuthController@updateUser');
+    Route::put('user-password/{id}','Api\AuthController@updatePasswordAndData');
+    Route::post('user/upload-image/{id}','Api\AuthController@uploadImage');
 });
 
 Route::get('man', 'Api\ManController@index');
