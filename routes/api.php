@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('order', 'Api\OrderPaymentController@store');
     Route::put('order/{id}', 'Api\OrderPaymentController@update');
     Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
+
+    Route::get('user/{id}','Api\AuthController@readData');
 });
 
 Route::get('man', 'Api\ManController@index');

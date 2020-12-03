@@ -71,14 +71,14 @@ class AuthController extends Controller
                 'data' => null,
             ],401); 
 
-        $user = User::where('email', $request['email'])->where('email_verified_at', '<>', NULL)->first();
-        if (!$user) {
-            return response([
-                'status' => 'fail',
-                "message" => 'Email is not verified yet',
-                'data' => null
-            ]);
-        }
+        // $user = User::where('email', $request['email'])->where('email_verified_at', '<>', NULL)->first();
+        // if (!$user) {
+        //     return response([
+        //         'status' => 'fail',
+        //         "message" => 'Email is not verified yet',
+        //         'data' => null
+        //     ]);
+        // }
 
         $user = Auth::user();
         // $user = $this->auth->user();
@@ -91,5 +91,132 @@ class AuthController extends Controller
             'token_type'=>'Bearer',
             'access_token'=>$token,
         ],200);//return data user dalam bentuk json
+    }
+
+    public function readData($id){
+        $user = User::find($id);
+
+        if(!is_null($user)){
+            return response([
+                'message'=> 'Retrieve User Success',
+                'data' => null,
+            ]);
+        } 
+
+        return response([
+            'message'=> 'User not found',
+            'data' => null,
+        ]);       
+    }
+
+    public function updatePasswordAndData(Request $request , $id){
+        $user = User::find($id);
+
+        $updateData =  $request->all();
+
+        $validate =  Validator::make($updateData,[
+            'first_name' => 'required|max:60',
+            'last_name' => 'required|max:60',
+            'oldPassword' => 'required',
+            'newPassword' => 'required',
+        ]);
+
+        if(!Hash::check($request->oldPassword,$user->password)){
+            return response([
+                'status' => 'fail',
+                'message' => 'Your old password is wrong',
+                'data' => null
+            ],400);
+        }
+
+        $user->password = bcrypt($request->newPassword);
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        
+        if(!$user->save()){
+            return response([
+                'status' => 'fail',
+                'message' => 'Update data user Failed',
+                'data' => null
+            ],400);    
+        }
+
+        return response([
+            'status' => 'success',
+            'message' => 'Update data user success',
+            'data' => $user
+        ],200);
+    }
+
+    public function uploadImage(Request $request , $id){
+        if($request->hasFile('image')){
+            $user = User::find($id);
+            if(is_null($user)){
+                return response([
+                    'message' => 'User not found',
+                    'data' => null
+                ],404);
+            }
+
+            $updateData = $request->all();
+            $validate =  Validator::make($updateData,[
+                'image' => 'mimes:jpeg,jpg,png',
+            ]);
+
+            if($validate->fails())
+                return response([
+                    'status'=>'fail',
+                    'message' => "Image format should be JPEG, JPG, or PNG",
+                ]);
+
+            
+            $file = $request->file('image');
+            $ekstensi = $file->extension();
+            $filename = 'IMG_'.time().'.'.$ekstensi;
+            $path = base_path().'/public/profile/';
+            $file->move($path,$filename);
+
+            $user->image = $filename;
+
+            if($user->save()){
+                return response([
+                    'message'=> 'Upload Image success',
+                    'user'=>$user
+                ]);
+            }else{
+                return response([
+                    'message'=> 'Upload Image Fail',
+                    'user'=>null
+                ]);
+            }
+        }
+    }
+
+    public function updateUser(Request $request , $id){
+        $user = User::find($id);
+        if(is_null($user)){
+            return response([
+                'message' => 'user not found',
+                'data' => null
+            ],404);
+        }
+        $updateData =  $request->all();    
+        
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        
+        if(!$user->save()){
+            return response([
+                'status' => 'fail',
+                'message' => 'Update user Failed',
+                'data' => null
+            ],400);    
+        }
+
+        return response([
+            'status' => 'success',
+            'message' => 'Update data user success',
+            'data' => $user
+        ],200);
     }
 }
