@@ -15,11 +15,10 @@ class CreateWomenTable extends Migration
     {
         Schema::create('women', function (Blueprint $table) {
             $table->bigIncrements('id_produkW');
-            $table->string('nama_productW');
-            $table->double('harga_productW');
-            $table->string('deskripsi_productW');
-            $table->string('gambar_productW');
-            $table->string('kategori');
+            $table->string('nama_produkW');
+            $table->double('harga_produkW');
+            $table->string('deskripsi_produkW');
+            $table->string('gambar_produkW');
             $table->integer('stok');
             $table->timestamps();
         });

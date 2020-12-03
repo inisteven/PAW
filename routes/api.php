@@ -37,20 +37,6 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('order', 'Api\OrderPaymentController@store');
     Route::put('order/{id}', 'Api\OrderPaymentController@update');
     Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
-
-    
-
-    Route::get('woman', 'Api\WomanController@index');
-    Route::get('woman/{id}', 'Api\WomanController@show');
-    Route::post('woman', 'Api\WomanController@store');
-    Route::put('woman/{id}', 'Api\WomanController@update');
-    Route::delete('woman/{id}', 'Api\WomanController@destroy');
-
-    Route::get('acc', 'Api\AccessoryController@index');
-    Route::get('acc/{id}', 'Api\AccessoryController@show');
-    Route::post('acc', 'Api\AccessoryController@store');
-    Route::put('acc/{id}', 'Api\AccessoryController@update');
-    Route::delete('acc/{id}', 'Api\AccessoryController@destroy');
 });
 
 Route::get('man', 'Api\ManController@index');
@@ -59,3 +45,17 @@ Route::post('man', 'Api\ManController@store');
 Route::put('man/{id}', 'Api\ManController@update');
 Route::delete('man/{id}', 'Api\ManController@destroy');
 Route::post('man/upload-image/{id}', 'Api\ManController@uploadImage');
+
+Route::get('woman', 'Api\WomanController@index');
+Route::get('woman/{id}', 'Api\WomanController@show');
+Route::post('woman', 'Api\WomanController@store');
+Route::put('woman/{id}', 'Api\WomanController@update');
+Route::delete('woman/{id}', 'Api\WomanController@destroy');
+Route::post('woman/upload-image/{id}', 'Api\WomanController@uploadImage');
+
+Route::get('acc', 'Api\AccessoryController@index');
+Route::get('acc/{id}', 'Api\AccessoryController@show');
+Route::post('acc', 'Api\AccessoryController@store');
+Route::put('acc/{id}', 'Api\AccessoryController@update');
+Route::delete('acc/{id}', 'Api\AccessoryController@destroy');
+Route::post('acc/upload-image/{id}', 'Api\AccessoryController@uploadImage');

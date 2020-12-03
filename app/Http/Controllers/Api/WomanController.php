@@ -160,7 +160,7 @@ class WomanController extends Controller
     public function uploadImage(Request $request , $id){
         if($request->hasFile('gambar_produkW')){
             $woman = Woman::find($id);
-            if(is_null($man)){
+            if(is_null($woman)){
                 return response([
                     'message' => 'Product not found',
                     'data' => null
@@ -169,7 +169,7 @@ class WomanController extends Controller
 
             $updateData = $request->all();
             $validate =  Validator::make($updateData,[
-                'gambar_produkM' => 'mimes:jpeg,jpg,png',
+                'gambar_produkW' => 'mimes:jpeg,jpg,png',
             ]);
 
             if($validate->fails())
@@ -182,7 +182,7 @@ class WomanController extends Controller
             $path = base_path().'/public/products/';
             $file->move($path,$filename);
 
-            $woman->gambar_produkM = $filename;
+            $woman->gambar_produkW = $filename;
 
             if($woman->save()){
                 return response([
