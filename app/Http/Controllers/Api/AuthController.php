@@ -16,35 +16,35 @@ class AuthController extends Controller
     use VerifiesEmails;
     public function register(Request $request){
 
-        $validate = Validator::make($storeData, [
-            'email' => 'required|unique'
-        ]);
+        // $storeData = $request->all();
+        // $validate = Validator::make($storeData, [
+        //     'first_name'=>'required',
+        //     'last_name'=>'required',
+        //     'email' => 'required|unique',
+        //     'password'=>'required',
+        // ]);
 
-        if($validate->fails()){
-            return response([
-                'status'=>"fail",
-                'message'=>"Email must be unique",
-            ]);
-        }
+        // if($validate->fails()){
+        //     return response([
+        //         'status'=>"fail",
+        //         'message'=>"Email must be unique",
+        //     ]);
+        // }
         
         $registrationData = $request->all();
     
         $registrationData['password']= bcrypt($request->password); //enkripsi password
-        $user = User::create($registrationData);
+        $user = User::create($registrationData)->sendEmailVerificationNotification();
         if($user){
-            $send = $user->sendEmailVerificationNotification();
-            if($send){
+            
                 return response([
                     'message'=>'Register Success and send email success',
                     'user'=>$user,
                 ],200);
-            }else{
-                return response([
-                    'message'=>'Register success and send email failed',
-                    'user'=>$user,
-                ],200);
+            
+                
             }
-        }
+        
         return response([
             'message'=>'Register failed',
             'user'=>null,
@@ -71,6 +71,10 @@ class AuthController extends Controller
                 'message' => 'Invalid Credentials',
                 'data' => null,
             ],401); 
+        
+        if(!$user->hasVerifiedEmail()){
+            return response(['message' => 'Verif your email first'],402);
+        }
 
         // $user = User::where('email', $request['email'])->where('email_verified_at', '<>', NULL)->first();
         // if (!$user) {
