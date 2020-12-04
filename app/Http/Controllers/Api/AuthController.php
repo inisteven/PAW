@@ -36,14 +36,11 @@ class AuthController extends Controller
         $registrationData['password']= bcrypt($request->password); //enkripsi password
         $user = User::create($registrationData)->sendEmailVerificationNotification();
         if($user){
-            
-                return response([
-                    'message'=>'Register Success and send email success',
-                    'user'=>$user,
-                ],200);
-            
-                
-            }
+            return response([
+                'message'=>'Register Success and send email success',
+                'user'=>$user,
+            ],200);    
+        }
         
         return response([
             'message'=>'Register failed',
