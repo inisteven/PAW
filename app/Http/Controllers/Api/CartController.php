@@ -54,7 +54,7 @@ class CartController extends Controller
         ]);
 
         if($validate->fails())
-            return response(['message' => $validate->errors()],400);
+            return response(['message' => $validate->errors()]);
         
 
         $cart = Cart::create($storeData);

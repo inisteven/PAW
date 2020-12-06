@@ -10,23 +10,23 @@ use App\Man;
 class ManController extends Controller
 {
     public function index(){
-        //$men = Man::all();
+        $men = Man::all();
 
-        $men = Man::paginate(3)->toArray();
+        // $men = Man::paginate(3)->toArray();
 
-        // if(count($men) > 0){
-        //     return response([
-        //         'message' => 'Retrieve All Success',
-        //         'data' => $men
-        //     ],200);
-        // }
+        if(count($men) > 0){
+            return response([
+                'message' => 'Retrieve All Success',
+                'data' => $men
+            ],200);
+        }
 
-        // return response([
-        //     'message' => 'Empty',
-        //     'data' => null
-        // ],404);
+        return response([
+            'message' => 'Empty',
+            'data' => null
+        ],404);
 
-        return array_reverse($men);
+        // return array_reverse($men);
     }
 
     public function show($id){
