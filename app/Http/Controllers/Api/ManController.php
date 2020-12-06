@@ -9,6 +9,12 @@ use App\Man;
 
 class ManController extends Controller
 {
+    public function getRandom(){
+        $produk = Man::all()->random(1);
+        return response([
+            'data'=>$produk,
+        ]);
+    }
     public function index(){
         $men = Man::all();
 

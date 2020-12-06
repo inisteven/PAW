@@ -9,6 +9,12 @@ use App\Woman;
 
 class WomanController extends Controller
 {
+    public function getRandom(){
+        $produk = Woman::all()->random(1);
+        return response([
+            'data'=>$produk,
+        ]);
+    }
     public function index(){
         $women = Woman::all();
 

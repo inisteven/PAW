@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 });
 
 Route::get('man', 'Api\ManController@index');
+Route::get('man-random', 'Api\ManController@getRandom');
 Route::get('man/{id}', 'Api\ManController@show');
 Route::post('man', 'Api\ManController@store');
 Route::put('man/{id}', 'Api\ManController@update');
@@ -50,6 +51,7 @@ Route::delete('man/{id}', 'Api\ManController@destroy');
 Route::post('man/upload-image/{id}', 'Api\ManController@uploadImage');
 
 Route::get('woman', 'Api\WomanController@index');
+Route::get('woman-random', 'Api\WomanController@getRandom');
 Route::get('woman/{id}', 'Api\WomanController@show');
 Route::post('woman', 'Api\WomanController@store');
 Route::put('woman/{id}', 'Api\WomanController@update');
@@ -57,6 +59,7 @@ Route::delete('woman/{id}', 'Api\WomanController@destroy');
 Route::post('woman/upload-image/{id}', 'Api\WomanController@uploadImage');
 
 Route::get('acc', 'Api\AccessoryController@index');
+Route::get('acc-random', 'Api\AccessoryController@getRandom');
 Route::get('acc/{id}', 'Api\AccessoryController@show');
 Route::post('acc', 'Api\AccessoryController@store');
 Route::put('acc/{id}', 'Api\AccessoryController@update');

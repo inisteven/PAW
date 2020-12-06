@@ -9,6 +9,13 @@ use App\Accessory;
 
 class AccessoryController extends Controller
 {
+    public function getRandom(){
+        $produk = Accessory::all()->random(1);
+        return response([
+            'data'=>$produk,
+        ]);
+    }
+
     public function index(){
         $accs = Accessory::all();
 
