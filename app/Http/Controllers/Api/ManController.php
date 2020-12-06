@@ -12,6 +12,8 @@ class ManController extends Controller
     public function index(){
         $men = Man::all();
 
+        // $men = Man::paginate(3)->toArray();
+
         if(count($men) > 0){
             return response([
                 'message' => 'Retrieve All Success',
@@ -24,6 +26,7 @@ class ManController extends Controller
             'data' => null
         ],404);
 
+        // return array_reverse($men);
     }
 
     public function show($id){
