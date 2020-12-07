@@ -45,12 +45,12 @@ class OrderPaymentController extends Controller
         $storeData = $request->all();
         $validate = Validator::make($storeData, [
             'id_user' => 'required|numeric',
-            'address' => 'required|alphanumeric',
-            'city' => 'required|alphanumeric',
-            'province' => 'required|alphanumeric',
+            'address' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'city' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'province' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
             'postal_code' => 'required|numeric',
             'total_harga' => 'required|numeric',
-            'phoneNumber' => 'required|alphanumeric'
+            'phoneNumber' => 'required|numeric'
         ]);
 
         if($validate->fails())
@@ -63,7 +63,7 @@ class OrderPaymentController extends Controller
             $filename = time().$file->getClientOriginalName();
             $path = base_path().'/public/uploads/order/'.$filename;
             $file->move($path,$filename);
-
+            $order->bukti_tf = $path;
         }
 
         $order = new OrderPayment;
@@ -73,8 +73,8 @@ class OrderPaymentController extends Controller
         $order->province = $request->province;
         $order->postal_code = $request->postal_code;
         $order->total_harga = $request->total_harga;
-        $order->bukti_tf = $path;
         $order->phoneNumber = $request->phoneNumber;
+        $order->bukti_tf = 0;
         $order->save();
         
         return response([
@@ -118,12 +118,12 @@ class OrderPaymentController extends Controller
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
             'id_user' => 'required|numeric',
-            'address' => 'required|alphanumeric',
-            'city' => 'required|alphanumeric',
-            'province' => 'required|alphanumeric',
+            'address' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'city' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
+            'province' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
             'postal_code' => 'required|numeric',
             'total_harga' => 'required|numeric',
-            'phoneNumber' => 'required|alphanumeric'
+            'phoneNumber' => 'required|numeric'
         ]);
 
         if($validate->fails())
