@@ -29,6 +29,8 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('cart', 'Api\CartController@store');
     Route::put('cart/{id}', 'Api\CartController@update');
     Route::delete('cart/{id}', 'Api\CartController@destroy');
+    Route::get('cart-cek/{idProduk}/{idUser}/{size}','Api\CartController@CartCek');
+    Route::put('cart-update/{idProduk}/{idUser}/{size}/{jumlah}','Api\CartController@update'); 
 
     Route::get('order', 'Api\OrderPaymentController@index');
     Route::get('order/{id}', 'Api\OrderPaymentController@show');
@@ -41,6 +43,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('user-password/{id}','Api\AuthController@updatePasswordAndData');
     Route::post('user/upload-image/{id}','Api\AuthController@uploadImage');
 });
+   
 
 Route::get('man', 'Api\ManController@index');
 Route::get('man-random', 'Api\ManController@getRandom');

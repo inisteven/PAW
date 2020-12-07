@@ -88,40 +88,39 @@ class CartController extends Controller
         ],400);
     }
 
-    public function update(Request $request, $id){
-        $cart = Cart::find($id);
-        if(is_null($cart)){
+    public function cartCek($idProduk,$idUser, $size){
+        $matchThese = ['id_productCart' => $idProduk,'id_userCart' => $idUser, 'size' => $size,'isPay'=>0];
+        $cart = Cart::where($matchThese)->get();
+
+        return response([
+            'data' => $cart,
+        ]);
+    }
+
+    public function update($id_productCart,$id_userCart,$size,$jumlah){
+        
+        $matchThese = ['id_productCart' => $id_productCart, 'id_userCart'=> $id_userCart, 'size' => $size];
+        $cart = Cart::where($matchThese)->get()->first();
+
+        if($cart == null){
             return response([
                 'message' => 'Cart Not Found',
-                'data' => $null
+                'data' => $cart
             ],404);
         }
+            
+    
 
-        $updateData = $request->all();
-        $validate = Validator::make($updateData, [
-            'id_productCart' => 'required|numeric',
-            'id_userCart' => 'required|numeric',
-            'jumlah' => 'required|numeric',
-            'size' => 'required|alpha',
-            'total_harga' => 'required|numeric',
-            'isPay' => 'required|numeric',
-            'kategori' => 'required|alpha'
-        ]);
-
-        if($validate->fails())
-            return response(['message' => $validate->errors()],400);
-
-        $cart->id_productCart = $updateData['id_productCart'];
-        $cart->id_userCart = $updateData['id_userCart'];
-        $cart->jumlah = $updateData['jumlah'];
-        $cart->size = $updateData['size'];
-        $cart->total_harga = $updateData['total_harga'];
-        $cart->isPay = $updateData['isPay'];
-        $cart->kategori = $updateData['kategori'];
+        // $newStok = $cart->jumlah + $request->stok;
+        $hargaPerProduk = $cart->total_harga / $cart->jumlah;
+        $tambahanHarga = $jumlah * $hargaPerProduk;
+        $cart->jumlah = $cart->jumlah+$jumlah;
+        
+        $cart->total_harga = $cart->total_harga + $tambahanHarga; 
 
         if($cart->save()){
             return response([
-            'message' => 'Update Cart Success',
+            'message' => 'Add Cart Success',
             'data' => $cart,
             ],200);
         } 
