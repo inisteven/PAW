@@ -9,6 +9,12 @@ use App\Man;
 
 class ManController extends Controller
 {
+    public function getRandom(){
+        $produk = Man::all()->random(1);
+        return response([
+            'data'=>$produk,
+        ]);
+    }
     public function index(){
         $men = Man::all();
 
@@ -161,7 +167,7 @@ class ManController extends Controller
             'data' => null,
         ],400);
     }
-
+    
     public function uploadImage(Request $request , $id){
         if($request->hasFile('gambar_produkM')){
             $man = Man::find($id);

@@ -25,12 +25,25 @@ Route::get('email/verify/{id}', 'Api\VerificationController@verify')->name('veri
 
 Route::group(['middleware' => 'auth:api'], function(){
     
+<<<<<<< HEAD
+=======
+    
+    Route::get('cart-cek/{idProduk}/{idUser}/{size}/{kategori}','Api\CartController@cartCek');
+    
+    Route::get('cart/{id}', 'Api\CartController@show');
+    Route::post('cart', 'Api\CartController@store');
+    Route::put('cart/{id}', 'Api\CartController@update');
+    Route::delete('cart/{id}', 'Api\CartController@destroy');
+    
+    Route::put('cart-update/{idProduk}/{idUser}/{size}/{kategori}/{jumlah}','Api\CartController@update'); 
+>>>>>>> 85d32648216bb1b87c98ac4c4468adfcfacd8cc3
 
     
 
     
 });
 
+<<<<<<< HEAD
 Route::get('order', 'Api\OrderPaymentController@index');
 Route::get('order/{id}', 'Api\OrderPaymentController@show');
 Route::post('order', 'Api\OrderPaymentController@store');
@@ -47,8 +60,12 @@ Route::get('cart/{id}', 'Api\CartController@show');
 Route::post('cart', 'Api\CartController@store');
 Route::put('cart/{id}', 'Api\CartController@update');
 Route::delete('cart/{id}', 'Api\CartController@destroy');
+=======
+Route::get('cart/{id}', 'Api\CartController@index');
+>>>>>>> 85d32648216bb1b87c98ac4c4468adfcfacd8cc3
 
 Route::get('man', 'Api\ManController@index');
+Route::get('man-random', 'Api\ManController@getRandom');
 Route::get('man/{id}', 'Api\ManController@show');
 Route::post('man', 'Api\ManController@store');
 Route::put('man/{id}', 'Api\ManController@update');
@@ -56,6 +73,7 @@ Route::delete('man/{id}', 'Api\ManController@destroy');
 Route::post('man/upload-image/{id}', 'Api\ManController@uploadImage');
 
 Route::get('woman', 'Api\WomanController@index');
+Route::get('woman-random', 'Api\WomanController@getRandom');
 Route::get('woman/{id}', 'Api\WomanController@show');
 Route::post('woman', 'Api\WomanController@store');
 Route::put('woman/{id}', 'Api\WomanController@update');
@@ -63,6 +81,7 @@ Route::delete('woman/{id}', 'Api\WomanController@destroy');
 Route::post('woman/upload-image/{id}', 'Api\WomanController@uploadImage');
 
 Route::get('acc', 'Api\AccessoryController@index');
+Route::get('acc-random', 'Api\AccessoryController@getRandom');
 Route::get('acc/{id}', 'Api\AccessoryController@show');
 Route::post('acc', 'Api\AccessoryController@store');
 Route::put('acc/{id}', 'Api\AccessoryController@update');

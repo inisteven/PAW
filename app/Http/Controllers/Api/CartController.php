@@ -9,16 +9,37 @@ use App\Cart;
 
 class CartController extends Controller
 {
-    public function index(){
-        $carts = Cart::all();
+    // public function getTotal($idUser){
+    //     $matchThese = ['id_userCart' => $idUser,'isPay'=>0];
+    //     $carts = Cart::where($matchThese)->get();
+    //     if(count($carts) < 0){
+    //         return response([
+    //             'message' => 'Retrieve Fail',
+    //             'data' => null
+    //         ],200);
+    //     }
 
+        
+    //     return response([
+    //         'message' => 'sum success',
+    //         'total' => $total,
+    //     ],200);
+
+    // }
+    public function index($idUser){
+        $matchThese = ['id_userCart' => $idUser,'isPay'=>0];
+        $carts = Cart::where($matchThese)->get();
+
+        
         if(count($carts) > 0){
+            $total = $carts->sum('total_harga');
             return response([
                 'message' => 'Retrieve All Success',
-                'data' => $carts
+                'data' => $carts,
+                'total' => $total
             ],200);
         }
-
+        
         return response([
             'message' => 'Empty',
             'data' => null
@@ -88,40 +109,39 @@ class CartController extends Controller
         ],400);
     }
 
-    public function update(Request $request, $id){
-        $cart = Cart::find($id);
-        if(is_null($cart)){
+    public function cartCek($idProduk,$idUser, $size,$kategori){
+        $matchThese = ['id_productCart' => $idProduk,'id_userCart' => $idUser, 'size' => $size,'isPay'=>0,'kategori'=>$kategori];
+        $cart = Cart::where($matchThese)->get();
+
+        return response([
+            'data' => $cart,
+        ]);
+    }
+
+    public function update($id_productCart,$id_userCart,$size,$kategori,$jumlah){
+        
+        $matchThese = ['id_productCart' => $id_productCart, 'id_userCart'=> $id_userCart, 'size' => $size,'kategori' => $kategori];
+        $cart = Cart::where($matchThese)->get()->first();
+
+        if($cart == null){
             return response([
                 'message' => 'Cart Not Found',
-                'data' => $null
+                'data' => $cart
             ],404);
         }
+            
+    
 
-        $updateData = $request->all();
-        $validate = Validator::make($updateData, [
-            'id_productCart' => 'required|numeric',
-            'id_userCart' => 'required|numeric',
-            'jumlah' => 'required|numeric',
-            'size' => 'required|alpha',
-            'total_harga' => 'required|numeric',
-            'isPay' => 'required|numeric',
-            'kategori' => 'required|alpha'
-        ]);
-
-        if($validate->fails())
-            return response(['message' => $validate->errors()],400);
-
-        $cart->id_productCart = $updateData['id_productCart'];
-        $cart->id_userCart = $updateData['id_userCart'];
-        $cart->jumlah = $updateData['jumlah'];
-        $cart->size = $updateData['size'];
-        $cart->total_harga = $updateData['total_harga'];
-        $cart->isPay = $updateData['isPay'];
-        $cart->kategori = $updateData['kategori'];
+        // $newStok = $cart->jumlah + $request->stok;
+        $hargaPerProduk = $cart->total_harga / $cart->jumlah;
+        $tambahanHarga = $jumlah * $hargaPerProduk;
+        $cart->jumlah = $cart->jumlah+$jumlah;
+        
+        $cart->total_harga = $cart->total_harga + $tambahanHarga; 
 
         if($cart->save()){
             return response([
-            'message' => 'Update Cart Success',
+            'message' => 'Add Cart Success',
             'data' => $cart,
             ],200);
         } 
