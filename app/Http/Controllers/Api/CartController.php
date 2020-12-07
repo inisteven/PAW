@@ -89,8 +89,8 @@ class CartController extends Controller
         ],400);
     }
 
-    public function cartCek($idProduk,$idUser, $size){
-        $matchThese = ['id_productCart' => $idProduk,'id_userCart' => $idUser, 'size' => $size,'isPay'=>0];
+    public function cartCek($idProduk,$idUser, $size,$kategori){
+        $matchThese = ['id_productCart' => $idProduk,'id_userCart' => $idUser, 'size' => $size,'isPay'=>0,'kategori'=>$kategori];
         $cart = Cart::where($matchThese)->get();
 
         return response([
@@ -98,9 +98,9 @@ class CartController extends Controller
         ]);
     }
 
-    public function update($id_productCart,$id_userCart,$size,$jumlah){
+    public function update($id_productCart,$id_userCart,$size,$kategori,$jumlah){
         
-        $matchThese = ['id_productCart' => $id_productCart, 'id_userCart'=> $id_userCart, 'size' => $size];
+        $matchThese = ['id_productCart' => $id_productCart, 'id_userCart'=> $id_userCart, 'size' => $size,'kategori' => $kategori];
         $cart = Cart::where($matchThese)->get()->first();
 
         if($cart == null){

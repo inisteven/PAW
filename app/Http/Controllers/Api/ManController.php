@@ -167,7 +167,7 @@ class ManController extends Controller
             'data' => null,
         ],400);
     }
-
+    
     public function uploadImage(Request $request , $id){
         if($request->hasFile('gambar_produkM')){
             $man = Man::find($id);
