@@ -24,23 +24,29 @@ Route::post('/register',"Api\AuthController@register");
 Route::get('email/verify/{id}', 'Api\VerificationController@verify')->name('verification.verify');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::get('cart', 'Api\CartController@index');
-    Route::get('cart/{id}', 'Api\CartController@show');
-    Route::post('cart', 'Api\CartController@store');
-    Route::put('cart/{id}', 'Api\CartController@update');
-    Route::delete('cart/{id}', 'Api\CartController@destroy');
+    
 
-    Route::get('order', 'Api\OrderPaymentController@index');
-    Route::get('order/{id}', 'Api\OrderPaymentController@show');
-    Route::post('order', 'Api\OrderPaymentController@store');
-    Route::put('order/{id}', 'Api\OrderPaymentController@update');
-    Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
+    
 
-    Route::get('user/{id}','Api\AuthController@readData');
-    Route::put('user/{id}','Api\AuthController@updateUser');
-    Route::put('user-password/{id}','Api\AuthController@updatePasswordAndData');
-    Route::post('user/upload-image/{id}','Api\AuthController@uploadImage');
+    
 });
+
+Route::get('order', 'Api\OrderPaymentController@index');
+Route::get('order/{id}', 'Api\OrderPaymentController@show');
+Route::post('order', 'Api\OrderPaymentController@store');
+Route::put('order/{id}', 'Api\OrderPaymentController@update');
+Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
+
+Route::get('user/{id}','Api\AuthController@readData');
+Route::put('user/{id}','Api\AuthController@updateUser');
+Route::put('user-password/{id}','Api\AuthController@updatePasswordAndData');
+Route::post('user/upload-image/{id}','Api\AuthController@uploadImage');
+
+Route::get('cart', 'Api\CartController@index');
+Route::get('cart/{id}', 'Api\CartController@show');
+Route::post('cart', 'Api\CartController@store');
+Route::put('cart/{id}', 'Api\CartController@update');
+Route::delete('cart/{id}', 'Api\CartController@destroy');
 
 Route::get('man', 'Api\ManController@index');
 Route::get('man/{id}', 'Api\ManController@show');

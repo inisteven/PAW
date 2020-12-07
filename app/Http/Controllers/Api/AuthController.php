@@ -13,7 +13,7 @@ use Validator;
 
 class AuthController extends Controller
 {
-    use VerifiesEmails;
+    
     public function register(Request $request){
 
         // $storeData = $request->all();
