@@ -9,17 +9,37 @@ use App\Cart;
 
 class CartController extends Controller
 {
+    // public function getTotal($idUser){
+    //     $matchThese = ['id_userCart' => $idUser,'isPay'=>0];
+    //     $carts = Cart::where($matchThese)->get();
+    //     if(count($carts) < 0){
+    //         return response([
+    //             'message' => 'Retrieve Fail',
+    //             'data' => null
+    //         ],200);
+    //     }
+
+        
+    //     return response([
+    //         'message' => 'sum success',
+    //         'total' => $total,
+    //     ],200);
+
+    // }
     public function index($idUser){
         $matchThese = ['id_userCart' => $idUser,'isPay'=>0];
         $carts = Cart::where($matchThese)->get();
 
+        
         if(count($carts) > 0){
+            $total = $carts->sum('total_harga');
             return response([
                 'message' => 'Retrieve All Success',
-                'data' => $carts
+                'data' => $carts,
+                'total' => $total
             ],200);
         }
-
+        
         return response([
             'message' => 'Empty',
             'data' => null
