@@ -25,8 +25,6 @@ Route::get('email/verify/{id}', 'Api\VerificationController@verify')->name('veri
 
 Route::group(['middleware' => 'auth:api'], function(){
     
-<<<<<<< HEAD
-=======
     
     Route::get('cart-cek/{idProduk}/{idUser}/{size}/{kategori}','Api\CartController@cartCek');
     
@@ -36,33 +34,15 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::delete('cart/{id}', 'Api\CartController@destroy');
     
     Route::put('cart-update/{idProduk}/{idUser}/{size}/{kategori}/{jumlah}','Api\CartController@update'); 
->>>>>>> 85d32648216bb1b87c98ac4c4468adfcfacd8cc3
 
     
-
-    
+    Route::get('user/{id}','Api\AuthController@readData');
+    Route::put('user/{id}','Api\AuthController@updateUser');
+    Route::put('user-password/{id}','Api\AuthController@updatePasswordAndData');
+    Route::post('user/upload-image/{id}','Api\AuthController@uploadImage');
 });
 
-<<<<<<< HEAD
-Route::get('order', 'Api\OrderPaymentController@index');
-Route::get('order/{id}', 'Api\OrderPaymentController@show');
-Route::post('order', 'Api\OrderPaymentController@store');
-Route::put('order/{id}', 'Api\OrderPaymentController@update');
-Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
-
-Route::get('user/{id}','Api\AuthController@readData');
-Route::put('user/{id}','Api\AuthController@updateUser');
-Route::put('user-password/{id}','Api\AuthController@updatePasswordAndData');
-Route::post('user/upload-image/{id}','Api\AuthController@uploadImage');
-
-Route::get('cart', 'Api\CartController@index');
-Route::get('cart/{id}', 'Api\CartController@show');
-Route::post('cart', 'Api\CartController@store');
-Route::put('cart/{id}', 'Api\CartController@update');
-Route::delete('cart/{id}', 'Api\CartController@destroy');
-=======
 Route::get('cart/{id}', 'Api\CartController@index');
->>>>>>> 85d32648216bb1b87c98ac4c4468adfcfacd8cc3
 
 Route::get('man', 'Api\ManController@index');
 Route::get('man-random', 'Api\ManController@getRandom');
@@ -87,3 +67,9 @@ Route::post('acc', 'Api\AccessoryController@store');
 Route::put('acc/{id}', 'Api\AccessoryController@update');
 Route::delete('acc/{id}', 'Api\AccessoryController@destroy');
 Route::post('acc/upload-image/{id}', 'Api\AccessoryController@uploadImage');
+
+Route::get('order', 'Api\OrderPaymentController@index');
+Route::get('order/{id}', 'Api\OrderPaymentController@show');
+Route::post('order', 'Api\OrderPaymentController@store');
+Route::put('order/{id}', 'Api\OrderPaymentController@update');
+Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
