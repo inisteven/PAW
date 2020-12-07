@@ -9,8 +9,9 @@ use App\Cart;
 
 class CartController extends Controller
 {
-    public function index(){
-        $carts = Cart::all();
+    public function index($idUser){
+        $matchThese = ['id_userCart' => $idUser,'isPay'=>0];
+        $carts = Cart::where($matchThese)->get();
 
         if(count($carts) > 0){
             return response([

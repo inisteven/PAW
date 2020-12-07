@@ -24,7 +24,7 @@ Route::post('/register',"Api\AuthController@register");
 Route::get('email/verify/{id}', 'Api\VerificationController@verify')->name('verification.verify');
 
 Route::group(['middleware' => 'auth:api'], function(){
-    Route::get('cart', 'Api\CartController@index');
+    
     Route::get('cart/{id}', 'Api\CartController@show');
     Route::post('cart', 'Api\CartController@store');
     Route::put('cart/{id}', 'Api\CartController@update');
@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::post('user/upload-image/{id}','Api\AuthController@uploadImage');
 });
    
-
+Route::get('cart/{id}', 'Api\CartController@index');
 Route::get('man', 'Api\ManController@index');
 Route::get('man-random', 'Api\ManController@getRandom');
 Route::get('man/{id}', 'Api\ManController@show');
