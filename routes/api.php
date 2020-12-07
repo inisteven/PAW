@@ -36,10 +36,10 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::put('cart-update/{idProduk}/{idUser}/{size}/{kategori}/{jumlah}','Api\CartController@update'); 
 
     Route::get('order', 'Api\OrderPaymentController@index');
-    Route::get('order/{id}', 'Api\OrderPaymentController@show');
+    Route::get('order-get/{id}', 'Api\OrderPaymentController@show');
     Route::post('order', 'Api\OrderPaymentController@store');
-    Route::put('order/{id}', 'Api\OrderPaymentController@update');
-    Route::delete('order/{id}', 'Api\OrderPaymentController@destroy');
+    Route::put('order-put/{id}', 'Api\OrderPaymentController@update');
+    Route::delete('order-delete/{id}', 'Api\OrderPaymentController@destroy');
 
     Route::get('user/{id}','Api\AuthController@readData');
     Route::put('user/{id}','Api\AuthController@updateUser');
