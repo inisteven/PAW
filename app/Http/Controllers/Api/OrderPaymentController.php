@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\OrderPayment;
+use Illuminate\Support\Facades\DB;
 
 class OrderPaymentController extends Controller
 {
@@ -61,7 +62,7 @@ class OrderPaymentController extends Controller
         {
             $file = $request->file('image');
             $filename = time().$file->getClientOriginalName();
-            $path = base_path().'/public/uploads/order/'.$filename;
+            $path = base_path().'/public/order/'.$filename;
             $file->move($path,$filename);
             $order->bukti_tf = $path;
         }
@@ -117,13 +118,13 @@ class OrderPaymentController extends Controller
 
         $updateData = $request->all();
         $validate = Validator::make($updateData, [
-            'id_user' => 'required|numeric',
-            'address' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
-            'city' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
-            'province' => 'required|regex:/^[a-zA-Z0-9\s]+$/',
-            'postal_code' => 'required|numeric',
-            'total_harga' => 'required|numeric',
-            'phoneNumber' => 'required|numeric'
+            'id_user' => 'numeric',
+            'address' => 'regex:/^[a-zA-Z0-9\s]+$/',
+            'city' => 'regex:/^[a-zA-Z0-9\s]+$/',
+            'province' => 'regex:/^[a-zA-Z0-9\s]+$/',
+            'postal_code' => 'numeric',
+            'total_harga' => 'numeric',
+            'phoneNumber' => 'numeric'
         ]);
 
         if($validate->fails())
@@ -136,16 +137,9 @@ class OrderPaymentController extends Controller
         $order->postal_code = $updateData['postal_code'];
         $order->total_harga = $updateData['total_harga'];
         $order->phoneNumber = $updateData['phoneNumber'];
-        if($request->hasfile('image'))
-        {
-            $file = $request->file('image');
-            $filename = time().$file->getClientOriginalName();
-            $path = base_path().'/public/uploads/order/'.$filename;
-            $file->move($path,$filename);
-            $order->bukti_tf = $path;
-        }
+        $order->bukti_tf = $updateData['bukti_tf'];
 
-        if($cart->save()){
+        if($order->save()){
             return response([
             'message' => 'Update Order Payment Success',
             'data' => $order,
@@ -156,5 +150,62 @@ class OrderPaymentController extends Controller
             'message' => 'Update Order Payment Failed',
             'data' => null,
         ],400);
+    }
+
+    public function find($id){
+        $order = DB::table('order_payments')->where('id_user', $id)->where('bukti_tf',0)->first();
+
+        if(!is_null($order)){
+            return response([
+                'message' => 'Retrieve Order Payment Success',
+                'data' => $order
+            ],200);
+        }
+
+        return response([
+            'message' => 'Order Payment Not Found',
+            'data' => null
+        ],404);
+    }
+
+    public function uploadImage(Request $request , $id){
+        if($request->hasFile('image')){
+            $order = OrderPayment::find($id);
+            if(is_null($order)){
+                return response([
+                    'message' => 'Order Payment not found',
+                    'data' => null
+                ],404);
+            }
+
+            $updateData = $request->all();
+            $validate =  Validator::make($updateData,[
+                'image' => 'mimes:jpeg,jpg,png',
+            ]);
+
+            if($validate->fails())
+                return response(['message' => 'error',400]);
+
+
+            $file = $request->file('image');
+            $ekstensi = $file->extension();
+            $filename = 'IMG_'.time().'.'.$ekstensi;
+            $path = base_path().'/public/order/';
+            $file->move($path,$filename);
+
+            $order->bukti_tf = $filename;
+
+            if($order->save()){
+                return response([
+                    'message'=> 'Upload Image Success',
+                    'user'=>$order
+                ]);
+            }else{
+                return response([
+                    'message'=> 'Upload Image Fail',
+                    'user'=>null
+                ]);
+            }
+        }
     }
 }

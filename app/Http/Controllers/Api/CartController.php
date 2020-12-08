@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
 use App\Cart;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -133,5 +134,21 @@ class CartController extends Controller
             'message' => 'Update Cart Failed',
             'data' => null,
         ],400);
+    }
+
+    public function find($id){
+        $cart = DB::table('carts')->where('id_userCart', $id)->get();
+
+        if(!is_null($cart)){
+            return response([
+                'message' => 'Retrieve Cart Success',
+                'data' => $cart
+            ],200);
+        }
+
+        return response([
+            'message' => 'Cart Not Found',
+            'data' => null
+        ],404);
     }
 }
