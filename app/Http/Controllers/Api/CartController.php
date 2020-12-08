@@ -55,7 +55,10 @@ class CartController extends Controller
             'size' => 'required|alpha',
             'total_harga' => 'required|numeric',
             'isPay' => 'required|numeric',
-            'kategori' => 'required|alpha'
+            'kategori' => 'required|alpha',
+            'nama_produk'=> 'required',
+            'harga_produk'=>'required',
+            'image'=>'required'
         ]);
 
         if($validate->fails())
@@ -68,6 +71,11 @@ class CartController extends Controller
             'message' => 'Add Cart Success',
             'data' => $cart,
         ],200);
+    }
+
+    public function updatePay(Request $request, $id){
+        $matchThese = ['id_userCart' => $id,'isPay' => 0];
+        $cart = Cart::where($matchThese)->update(['isPay'=>1]);
     }
 
     public function destroy($id){
@@ -136,19 +144,19 @@ class CartController extends Controller
         ],400);
     }
 
-    public function find($id){
-        $cart = DB::table('carts')->where('id_userCart', $id)->get();
+    // public function find($id){
+    //     $cart = DB::table('carts')->where('id_userCart', $id)->get();
 
-        if(!is_null($cart)){
-            return response([
-                'message' => 'Retrieve Cart Success',
-                'data' => $cart
-            ],200);
-        }
+    //     if(!is_null($cart)){
+    //         return response([
+    //             'message' => 'Retrieve Cart Success',
+    //             'data' => $cart
+    //         ],200);
+    //     }
 
-        return response([
-            'message' => 'Cart Not Found',
-            'data' => null
-        ],404);
-    }
+    //     return response([
+    //         'message' => 'Cart Not Found',
+    //         'data' => null
+    //     ],404);
+    // }
 }

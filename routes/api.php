@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth:api'], function(){
 
 Route::get('cart/{id}', 'Api\CartController@index');
 Route::get('cart/search/{id}', 'Api\CartController@find');
+Route::put('cart-update-pay/{id}', 'Api\CartController@updatePay');
     
 Route::get('man', 'Api\ManController@index');
 Route::get('man-random', 'Api\ManController@getRandom');

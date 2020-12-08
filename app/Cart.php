@@ -9,7 +9,7 @@ class Cart extends Model
 {
     protected $primaryKey = "id_cart";
     protected $fillable = [
-        'id_productCart', 'id_userCart', 'jumlah', 'size', 'total_harga', 'isPay', 'kategori'
+        'id_productCart', 'id_userCart', 'jumlah', 'size', 'total_harga', 'isPay', 'kategori','nama_produk','harga_produk','image'
     ];
 
     public function getCreatedAtAttribute(){
